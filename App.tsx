@@ -9,6 +9,7 @@ import SearchPage from './views/SearchPage';
 import SectorPerformance from './views/SectorPerformance';
 import TreeMap from './views/TreeMap';
 import PerformanceBarChart from './views/PerformanceBarChart';
+import NewsPage from './views/NewsPage';
 import { GraphType } from './types';
 
 // Export Context for child components
@@ -20,15 +21,23 @@ export const ThemeContext = React.createContext({
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<GraphType>(GraphType.HOME);
   const [isDark, setIsDark] = useState(false);
+  const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null);
 
   const toggleTheme = () => setIsDark(prev => !prev);
+
+  const handleOpenNews = (id: string) => {
+    setSelectedNewsId(id);
+    setCurrentView(GraphType.NEWS);
+  };
 
   const renderView = () => {
     switch (currentView) {
       case GraphType.HOME:
-        return <SearchPage />;
+        return <SearchPage onOpenNews={handleOpenNews} />;
       case GraphType.DASHBOARD:
-        return <StockDashboard />;
+        return <StockDashboard onOpenNews={handleOpenNews} />;
+      case GraphType.NEWS:
+        return <NewsPage newsId={selectedNewsId || 'supply-chain'} onBack={() => setCurrentView(GraphType.HOME)} />;
       case GraphType.DAG:
         return <LayeredGraph />;
       case GraphType.TREE:
@@ -44,7 +53,7 @@ const App: React.FC = () => {
       case GraphType.PERFORMANCE_BARS:
         return <PerformanceBarChart />;
       default:
-        return <SearchPage />;
+        return <SearchPage onOpenNews={handleOpenNews} />;
     }
   };
 

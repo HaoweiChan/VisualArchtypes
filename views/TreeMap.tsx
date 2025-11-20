@@ -90,16 +90,18 @@ const Tooltip = ({ item, position }: { item: TreeMapItem, position: { x: number,
 
 
 // --- Component: Recursive Treemap Tile ---
-const TreeMapTile = ({ 
+interface TreeMapTileProps { 
+    item: TreeMapItem; 
+    depth?: number; 
+    onHover: (item: TreeMapItem, e: React.MouseEvent) => void;
+    onLeave: () => void;
+}
+
+const TreeMapTile: React.FC<TreeMapTileProps> = ({ 
     item, 
     depth = 0, 
     onHover, 
     onLeave 
-}: { 
-    item: TreeMapItem, 
-    depth?: number, 
-    onHover: (item: TreeMapItem, e: React.MouseEvent) => void,
-    onLeave: () => void
 }) => {
     // Layout Logic:
     // We simulate squarified tiling by using Flexbox.

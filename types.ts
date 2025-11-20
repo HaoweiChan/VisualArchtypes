@@ -9,7 +9,8 @@ export enum GraphType {
   SANKEY = 'SANKEY',
   SECTOR_BUBBLE = 'SECTOR_BUBBLE',
   TREEMAP = 'TREEMAP',
-  PERFORMANCE_BARS = 'PERFORMANCE_BARS'
+  PERFORMANCE_BARS = 'PERFORMANCE_BARS',
+  NEWS = 'NEWS'
 }
 
 export enum DisplayMode {

@@ -79,22 +79,29 @@ const MainChart = ({ isDark }: { isDark: boolean }) => (
 
 // --- News Feed Component ---
 
-const StoryCard = ({ 
+interface StoryCardProps {
+    source: string;
+    time: string;
+    title: string;
+    children: React.ReactNode;
+    graphTypeLabel: string;
+    isDark: boolean;
+    onClick: () => void;
+}
+
+const StoryCard: React.FC<StoryCardProps> = ({ 
   source, 
   time, 
   title, 
   children, 
   graphTypeLabel,
-  isDark
-}: { 
-  source: string; 
-  time: string; 
-  title: string; 
-  children: React.ReactNode;
-  graphTypeLabel: string;
-  isDark: boolean;
+  isDark,
+  onClick
 }) => (
-  <div className={`rounded-xl border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group h-[450px] flex flex-col ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+  <div 
+    onClick={onClick}
+    className={`rounded-xl border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group h-[450px] flex flex-col cursor-pointer ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}
+  >
     {/* Header */}
     <div className={`p-4 border-b z-10 relative ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
       <div className="flex items-center justify-between mb-2">
@@ -135,7 +142,11 @@ const StoryCard = ({
   </div>
 );
 
-const SearchPage: React.FC = () => {
+interface SearchPageProps {
+  onOpenNews: (id: string) => void;
+}
+
+const SearchPage: React.FC<SearchPageProps> = ({ onOpenNews }) => {
   const { isDark } = useContext(ThemeContext);
 
   return (
@@ -238,6 +249,7 @@ const SearchPage: React.FC = () => {
                title="EV Supply Chain Shakeup: New Alliances Formed in Asia"
                graphTypeLabel="Supply Chain Graph"
                isDark={isDark}
+               onClick={() => onOpenNews('supply-chain')}
              >
                 {/* Only showing the graph, widgets hide the panels via isWidget prop */}
                 <LayeredGraph isWidget />
@@ -250,6 +262,7 @@ const SearchPage: React.FC = () => {
                title="Tech Giants: Boardroom Interlocks Reveal Strategy Alignment"
                graphTypeLabel="Ecosystem Cluster"
                isDark={isDark}
+               onClick={() => onOpenNews('governance')}
              >
                 <ForceGraph isWidget />
              </StoryCard>
@@ -261,6 +274,7 @@ const SearchPage: React.FC = () => {
                title="Capital Flows: Where is the Smart Money Moving in Q4?"
                graphTypeLabel="Sankey Flow"
                isDark={isDark}
+               onClick={() => onOpenNews('capital-flow')}
              >
                 <SankeyGraph isWidget />
              </StoryCard>
@@ -272,6 +286,7 @@ const SearchPage: React.FC = () => {
                title="Corporate Structuring: Siemens Spin-off Analysis"
                graphTypeLabel="Ownership Tree"
                isDark={isDark}
+               onClick={() => onOpenNews('structuring')}
              >
                 <div className="w-full h-full relative">
                     <div className="absolute inset-0 transform scale-90 origin-center">

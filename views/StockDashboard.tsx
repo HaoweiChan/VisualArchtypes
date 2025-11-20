@@ -50,22 +50,29 @@ const StockHeader = () => (
   </div>
 );
 
-const NewsCard = ({ 
+interface NewsCardProps {
+    category: string;
+    date: string;
+    title: string;
+    summary: string;
+    children: React.ReactNode;
+    colorClass?: string;
+    onClick?: () => void;
+}
+
+const NewsCard: React.FC<NewsCardProps> = ({ 
     category, 
     date, 
     title, 
     summary, 
     children,
-    colorClass = "bg-indigo-50 text-indigo-700"
-}: { 
-    category: string; 
-    date: string; 
-    title: string; 
-    summary: string; 
-    children: React.ReactNode;
-    colorClass?: string;
+    colorClass = "bg-indigo-50 text-indigo-700",
+    onClick
 }) => (
-  <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-[420px]">
+  <div 
+    onClick={onClick}
+    className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:border-indigo-100 transition-all duration-300 flex flex-col h-[420px] cursor-pointer group"
+  >
     <div className="p-5 flex-shrink-0">
       <div className="flex items-center justify-between mb-3">
         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full ${colorClass}`}>
@@ -76,7 +83,7 @@ const NewsCard = ({
             {date}
         </div>
       </div>
-      <h3 className="font-bold text-slate-800 text-lg leading-snug mb-2">{title}</h3>
+      <h3 className="font-bold text-slate-800 text-lg leading-snug mb-2 group-hover:text-indigo-600 transition-colors">{title}</h3>
       <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">{summary}</p>
     </div>
     
@@ -87,20 +94,24 @@ const NewsCard = ({
         </div>
         {/* Overlay to indicate interactivity */}
         <div className="absolute bottom-2 right-2 bg-white/90 px-2 py-1 rounded text-[10px] text-slate-400 border border-slate-100 shadow-sm pointer-events-none">
-            Interactive Plot
+            Click to analyze
         </div>
     </div>
 
     <div className="p-3 bg-white border-t border-slate-100 flex justify-between items-center">
          <span className="text-xs text-slate-400 font-medium">AI-Generated Insight</span>
-         <button className="text-xs font-bold text-indigo-600 flex items-center hover:underline">
+         <button className="text-xs font-bold text-indigo-600 flex items-center group-hover:underline">
             Read Full Report <ChevronRight size={12} />
          </button>
     </div>
   </div>
 );
 
-const StockDashboard: React.FC = () => {
+interface StockDashboardProps {
+  onOpenNews: (id: string) => void;
+}
+
+const StockDashboard: React.FC<StockDashboardProps> = ({ onOpenNews }) => {
   return (
     <div className="w-full h-full bg-slate-50 overflow-y-auto pb-12">
       <StockHeader />
@@ -119,6 +130,7 @@ const StockDashboard: React.FC = () => {
                 title="Battery Material Sourcing Risks"
                 summary="Analysis of upstream dependencies on CATL reveals potential bottlenecks in the Asian market. Diversification strategies suggested."
                 colorClass="bg-orange-50 text-orange-700"
+                onClick={() => onOpenNews('supply-chain')}
             >
                 <LayeredGraph isWidget />
             </NewsCard>
@@ -130,6 +142,7 @@ const StockDashboard: React.FC = () => {
                 title="Board Interlock Analysis"
                 summary="New board appointments strengthen ties with SpaceX, raising questions about executive bandwidth and oversight overlap."
                 colorClass="bg-blue-50 text-blue-700"
+                onClick={() => onOpenNews('governance')}
             >
                 <ForceGraph isWidget />
             </NewsCard>
@@ -141,6 +154,7 @@ const StockDashboard: React.FC = () => {
                 title="Institutional Inflows Surge"
                 summary="Softbank Vision Fund and major ETF providers have increased positions significantly in Q3, signaling long-term confidence."
                 colorClass="bg-emerald-50 text-emerald-700"
+                onClick={() => onOpenNews('capital-flow')}
             >
                 <SankeyGraph isWidget />
             </NewsCard>
