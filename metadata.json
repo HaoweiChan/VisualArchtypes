@@ -1,0 +1,5 @@
+{
+  "name": "VisualArchetypes",
+  "description": "A suite of 4 fundamental graph visualizations (DAG, Tree, Cluster, Sankey) for complex business relationships.",
+  "requestFramePermissions": []
+}
